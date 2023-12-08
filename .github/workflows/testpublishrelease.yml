@@ -1,0 +1,33 @@
+name: Test Publish Release
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - 'main'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version for manual hotfix release.'
+        required: false
+        default: ''
+
+concurrency:
+  group: publish-release
+  cancel-in-progress: false
+
+jobs:
+  pre-release-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set Version from the PR title.
+        if: github.event_name == 'pull_request'
+        run: |
+          #!!! pull_request title is 100% user controllable! not sure if a regular user can trigger this workflow, however...
+          echo "GITHUB_TAG_MAJOR_VERSION=${{ github.event.pull_request.title }}" >> ${GITHUB_ENV}
