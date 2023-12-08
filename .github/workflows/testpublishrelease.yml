@@ -23,7 +23,6 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Test with input from workflow
-        if: github.event_name == 'pull_request'
         run: |
           #!!! pull_request title is 100% user controllable! not sure if a regular user can trigger this workflow, however...
           echo "GITHUB_TAG_MAJOR_VERSION=${{ github.event.pull_request.title }}" >> ${GITHUB_ENV}
