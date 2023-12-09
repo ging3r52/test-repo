@@ -32,3 +32,23 @@ jobs:
         if: github.event_name == 'pull_request'
         run: |
           echo "GITHUB_TAG_MAJOR_VERSION=${{ github.event.pull_request.title }}" >> ${GITHUB_ENV}
+          
+   publish-release:
+    runs-on: buildjet-4vcpu-ubuntu-2004
+    timeout-minutes: 60
+    needs:
+      - pre-release-checks
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Echo Release Notes from PR Message.
+        if: github.event_name == 'pull_request'
+        id: release_notes
+        run: |
+          cat changelog.md > ${{ github.workspace }}-CHANGELOG.txt
+          cat ${{ github.workspace }}-CHANGELOG.txt
+
+      - name: Set Version from the PR title.
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "GITHUB_TAG_MAJOR_VERSION=${{ github.event.pull_request.title }}" >> ${GITHUB_ENV}
