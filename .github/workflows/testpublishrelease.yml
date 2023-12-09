@@ -25,6 +25,7 @@ jobs:
       - name: Test with input from workflow
         run: |
           echo "GITHUB_TAG_MAJOR_VERSION=${{ github.event.inputs.version }}" >> ${GITHUB_ENV}
+          exit 1
 
 
       - name: Set with input from the PR title.
